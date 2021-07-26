@@ -1,5 +1,6 @@
+import { User } from 'src/modules/user/user.entity';
 import { BaseEntity } from 'src/utility/entity/base.entity';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 export class Product extends BaseEntity {
@@ -8,4 +9,12 @@ export class Product extends BaseEntity {
 
   @Column()
   price: number;
+
+  @ManyToOne((type) => User, (user) => user.products_created, { lazy: true })
+  @JoinColumn()
+  createdBy: User;
+
+  @ManyToOne((type) => User, (user) => user.products_created, { lazy: true })
+  @JoinColumn()
+  updatedBy: User;
 }

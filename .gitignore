@@ -35,3 +35,6 @@ lerna-debug.log*
 
 # Docker database store
 /db-data
+
+#Environment files
+.env.production

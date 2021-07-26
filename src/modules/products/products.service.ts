@@ -22,8 +22,8 @@ export class ProductsService {
     product.price = productDto.price;
 
     const creator = await this.usersService.findForId(createdBy);
-    product.assigned.createdBy = creator;
-    product.assigned.updatedBy = creator;
+    product.createdBy = creator;
+    product.updatedBy = creator;
     return this.productsRepository.save(product);
   }
 
@@ -34,8 +34,9 @@ export class ProductsService {
 
     const totalCount = await this.productsRepository.count();
     const products = await this.productsRepository
-      .createQueryBuilder()
-      .orderBy('assigned.createdDateTime', 'DESC')
+      .createQueryBuilder('product')
+      .orderBy('product.dated.createdDateTime', 'DESC')
+      .addOrderBy('product.dated.updatedDateTime', 'DESC')
       .offset(skippedItems)
       .limit(paginationDto.limit)
       .getMany();
@@ -61,7 +62,7 @@ export class ProductsService {
     const product = new Product();
     product.name = updateProductDto.name;
     product.price = updateProductDto.price;
-    product.assigned.updatedBy = await this.usersService.findForId(updatedBy);
+    product.updatedBy = await this.usersService.findForId(updatedBy);
 
     return this.productsRepository.update({ id }, updateProductDto);
   }

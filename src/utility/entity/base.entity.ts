@@ -1,5 +1,5 @@
 import { Column, PrimaryGeneratedColumn } from 'typeorm';
-import { Assigned, Dated } from './composition';
+import { Dated } from './composition';
 
 export abstract class BaseEntity {
   /**
@@ -13,9 +13,6 @@ export abstract class BaseEntity {
 
   @Column({ type: 'boolean', default: false })
   isArchived: boolean;
-
-  @Column((type) => Assigned)
-  assigned: Assigned;
 
   @Column((type) => Dated)
   dated: Dated;

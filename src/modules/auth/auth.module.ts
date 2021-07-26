@@ -9,6 +9,7 @@ import { AuthenticationController } from './auth.controller';
 import { RefreshTokensRepository } from './refresh-tokens.repository';
 import { JWTStrategy } from './strategy/jwt.strategy';
 import { TokensService } from './token.service';
+
 @Module({
   imports: [
     TypeOrmModule.forFeature([RefreshTokensRepository]),

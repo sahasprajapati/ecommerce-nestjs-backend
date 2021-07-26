@@ -17,31 +17,19 @@ export class UserService {
   }
 
   public async create(
-    createdBy: string,
     dto: CreateUserDTO,
     // , user: User
   ): Promise<UserDTO> {
     const user = new User();
     user.name = dto.name;
     user.password = dto.password;
-    const creator = await this.users.findForId(createdBy);
 
-    console.log(creator);
-    user.assigned = {
-      createdBy: creator,
-      updatedBy: creator,
-    };
+    // console.log(dto);
+
     return await this.users.save(user);
   }
-  public async update(
-    updatedBy: string,
-    id: string,
-    dto: updateUserDTO,
-  ): Promise<UpdateResult> {
+  public async update(id: string, dto: updateUserDTO): Promise<UpdateResult> {
     return await this.users.update(id, {
-      assigned: {
-        updatedBy: await this.findForId(updatedBy),
-      },
       ...dto,
     });
   }

@@ -21,21 +21,15 @@ export class User extends BaseEntity {
   @Column('enum', { enum: ['admin', 'user'], array: true, default: ['user'] })
   roles: Role[];
 
-  @OneToMany((type) => User, (user) => user.assigned.createdBy)
-  users_created: User;
-
-  @OneToMany((type) => User, (user) => user.assigned.updatedBy)
-  users_updated: User;
-
-  @OneToMany((type) => Product, (product) => product.assigned.createdBy)
+  @OneToMany((type) => Product, (product) => product.createdBy)
   products_created: Product;
 
-  @OneToMany((type) => Product, (product) => product.assigned.updatedBy)
+  @OneToMany((type) => Product, (product) => product.updatedBy)
   products_updated: Product;
 
-  @OneToMany((type) => Category, (category) => category.assigned.createdBy)
+  @OneToMany((type) => Category, (category) => category.createdBy)
   category_created: Category;
 
-  @OneToMany((type) => Category, (category) => category.assigned.updatedBy)
+  @OneToMany((type) => Category, (category) => category.updatedBy)
   category_updated: Category;
 }

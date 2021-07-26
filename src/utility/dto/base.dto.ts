@@ -1,4 +1,4 @@
-import { Assigned, Dated } from '../entity/composition';
+import { Dated } from '../entity/composition';
 
 export abstract class BaseDto {
   id: string;
@@ -6,8 +6,6 @@ export abstract class BaseDto {
   isActive: boolean;
 
   isArchived: boolean;
-
-  assigned: Assigned;
 
   dated: Dated;
 

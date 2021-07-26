@@ -14,7 +14,7 @@ export class UserRepository extends Repository<User> {
   }
 
   findForUsername(username: string): Promise<User | null> {
-    console.log(username);
+    // console.log(username);
     return this.findOne({
       where: {
         name: username,

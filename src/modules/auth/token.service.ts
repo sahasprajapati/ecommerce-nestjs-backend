@@ -52,7 +52,7 @@ export class TokensService {
 
   public async resolveRefreshToken(
     encoded: string,
-  ): Promise<{ user: User; token: RefreshToken }> {
+  ): Promise<{ user: User; refreshToken: string }> {
     const payload = await this.decodeRefreshToken(encoded);
     const token = await this.getStoredTokenFromRefreshPayload(payload);
 
@@ -60,6 +60,9 @@ export class TokensService {
       throw new UnprocessableEntityException('Refresh token not found');
     }
     if (token.is_revoked) {
+      // If refresh token used again revoke all available refresh tokens
+      await this.tokens.deleteAllRefreshTokenForUser(token.user_id, false);
+
       throw new UnprocessableEntityException('Refresh token revoked');
     }
 
@@ -68,17 +71,30 @@ export class TokensService {
     if (!user) {
       throw new UnprocessableEntityException('Refresh token malformed');
     }
-    return { user, token };
+    await this.tokens.deleteAllRefreshTokenForUser(token.user_id);
+
+    // https://auth0.com/blog/refresh-tokens-what-are-they-and-when-to-use-them/
+    // Refresh Token Rotation Strategy Used
+
+    // Revoke the current Refresh Token
+    this.tokens.revokeRefreshToken(token.id);
+    // Send a new refresh Token with Each refresh (For security)
+    const refreshToken = await this.generateRefreshToken(
+      user,
+      60 * 60 * 24 * 30,
+    );
+
+    return { user, refreshToken };
   }
 
   public async createAcessTokenFromRefreshToken(
     refresh: string,
-  ): Promise<{ token: string; user: User }> {
-    const { user } = await this.resolveRefreshToken(refresh);
+  ): Promise<{ token: string; user: User; refreshToken: string }> {
+    const { user, refreshToken } = await this.resolveRefreshToken(refresh);
 
     const token = await this.generateAccessToken(user);
 
-    return { user, token };
+    return { user, token, refreshToken };
   }
 
   private async decodeRefreshToken(

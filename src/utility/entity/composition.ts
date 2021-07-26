@@ -1,5 +1,4 @@
-import { User } from 'src/modules/user/user.entity';
-import { Column, CreateDateColumn, ManyToOne, UpdateDateColumn } from 'typeorm';
+import { Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
 export class Name {
   @Column({
@@ -12,13 +11,6 @@ export class Name {
     type: 'string',
   })
   lastName: string;
-}
-export class Assigned {
-  @ManyToOne((type) => User, (user) => user.users_created, { lazy: true })
-  createdBy: User;
-
-  @ManyToOne((type) => User, (user) => user.users_updated, { lazy: true })
-  updatedBy: User;
 }
 
 export class Dated {

@@ -7,7 +7,6 @@ import {
   Post,
   Put,
 } from '@nestjs/common';
-import { Auth } from 'src/utility/decorator/auth.decorator';
 import { User } from 'src/utility/decorator/user.decorator';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { CreateUserDTO } from './dto/createUser.dto';
@@ -24,20 +23,14 @@ export class UserController {
    *
    */
   @Get()
-  @Auth()
   async getAll(@User('id') id: string): Promise<UserDTO[]> {
     console.log(id);
     return await this.service.getAll();
   }
 
   @Post()
-  @Auth()
-  public async create(
-    @User('id') createdBy: string,
-    @Body() dto: CreateUserDTO,
-  ): Promise<UserDTO> {
-    console.log(createdBy);
-    return this.service.create(createdBy, dto);
+  public async create(@Body() dto: CreateUserDTO): Promise<UserDTO> {
+    return this.service.create(dto);
   }
 
   @Delete(':id')
@@ -46,12 +39,10 @@ export class UserController {
   }
 
   @Put(':id')
-  @Auth()
   public async update(
     @Param('id') id: string,
-    @User('id') updatedBy: string,
     @Body() updateData: updateUserDTO,
   ): Promise<UpdateResult> {
-    return await this.service.update(updatedBy, id, updateData);
+    return await this.service.update(id, updateData);
   }
 }

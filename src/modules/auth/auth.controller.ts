@@ -78,11 +78,10 @@ export class AuthenticationController {
 
   @Post('/refresh')
   public async refresh(@Body() body: RefreshRequest) {
-    const { user, token } = await this.tokens.createAcessTokenFromRefreshToken(
-      body.refresh_token,
-    );
+    const { user, token, refreshToken } =
+      await this.tokens.createAcessTokenFromRefreshToken(body.refresh_token);
 
-    const payload = this.buildResponsePayload(user, token);
+    const payload = this.buildResponsePayload(user, token, refreshToken);
 
     return {
       status: 'success',

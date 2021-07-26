@@ -21,15 +21,6 @@ import { ProductsService } from './products.service';
 export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
-  @Post()
-  @Auth()
-  create(
-    @User('id') createdBy: string,
-    @Body() createProductDto: CreateProductDto,
-  ) {
-    return this.productsService.create(createdBy, createProductDto);
-  }
-
   @Get()
   findAll(
     @Query() paginationDto: PaginationDto,
@@ -47,6 +38,15 @@ export class ProductsController {
     return this.productsService.findOne(id);
   }
 
+  @Post()
+  @Auth()
+  create(
+    @User('id') createdBy: string,
+    @Body() createProductDto: CreateProductDto,
+  ) {
+    return this.productsService.create(createdBy, createProductDto);
+  }
+
   @Patch(':id')
   @Auth()
   update(
@@ -58,6 +58,7 @@ export class ProductsController {
   }
 
   @Delete(':id')
+  @Auth()
   remove(@Param('id') id: string) {
     return this.productsService.remove(id);
   }
