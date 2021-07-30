@@ -78,6 +78,7 @@ export class AuthenticationController {
 
   @Post('/refresh')
   public async refresh(@Body() body: RefreshRequest) {
+    console.log(body);
     const { user, token, refreshToken } =
       await this.tokens.createAcessTokenFromRefreshToken(body.refresh_token);
 
@@ -109,7 +110,7 @@ export class AuthenticationController {
       payload: {
         type: 'bearer',
         token: accessToken,
-        ...(refreshToken ? { refreshToken: refreshToken } : {}),
+        ...(refreshToken ? { refresh_token: refreshToken } : {}),
       },
     };
   }
