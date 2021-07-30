@@ -34,8 +34,10 @@ async function bootstrap() {
     .addTag('Ecommerce')
     .build();
   const document = SwaggerModule.createDocument(app, config);
+
   SwaggerModule.setup('api', app, document);
 
+  console.log('PORT', configService.get('PORT'));
   await app.listen(configService.get('PORT') || 8080);
 }
 bootstrap();
