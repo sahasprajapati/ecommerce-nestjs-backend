@@ -38,3 +38,4 @@ lerna-debug.log*
 
 #Environment files
 .env.production
+.env

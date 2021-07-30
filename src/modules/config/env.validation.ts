@@ -44,6 +44,9 @@ export class EnvironmentVariables {
 
   @IsString()
   URL: string;
+
+  @IsString()
+  POSTGRES_URL: string;
 }
 
 export function validate(config: Record<string, unknown>) {

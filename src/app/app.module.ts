@@ -24,6 +24,8 @@ import { AppService } from './app.service';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService<EnvironmentVariables>) => ({
         type: 'postgres',
+        // url: configService.get('POSTGRES_URL'),
+
         host: configService.get('POSTGRES_HOST'),
         port: configService.get('POSTGRES_PORT'),
         username: configService.get('POSTGRES_USER'),

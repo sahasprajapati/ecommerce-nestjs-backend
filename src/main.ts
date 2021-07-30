@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import {
   FastifyAdapter,
@@ -23,6 +24,8 @@ async function bootstrap() {
     },
   });
 
+  const configService = app.get(ConfigService);
+
   // app.register(fastifyCsrf);
   const config = new DocumentBuilder()
     .setTitle('Ecommerce API')
@@ -33,6 +36,6 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
 
-  await app.listen(process.env.PORT || 8080);
+  await app.listen(configService.get('PORT') || 8080);
 }
 bootstrap();
