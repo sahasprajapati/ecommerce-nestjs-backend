@@ -23,15 +23,15 @@ async function bootstrap() {
   const configService = app.get(ConfigService);
 
   // app.register(fastifyCsrf);
-  const config = new DocumentBuilder()
-    .setTitle('Ecommerce API')
-    .setDescription('Ecommerce API description')
-    .setVersion('0.1')
-    .addTag('Ecommerce')
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
+  // const config = new DocumentBuilder()
+  //   .setTitle('Ecommerce API')
+  //   .setDescription('Ecommerce API description')
+  //   .setVersion('0.1')
+  //   .addTag('Ecommerce')
+  //   .build();
+  // const document = SwaggerModule.createDocument(app, config);
 
-  SwaggerModule.setup('api', app, document);
+  // SwaggerModule.setup('api', app, document);
 
   console.log('PORT', configService.get('PORT'));
   await app.listen(configService.get('PORT') || 3000);
