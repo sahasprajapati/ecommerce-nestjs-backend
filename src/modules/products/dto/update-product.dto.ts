@@ -1,4 +1,8 @@
-import { PartialType } from '@nestjs/swagger';
-import { CreateProductDto } from './create-product.dto';
+import { UpdateImages } from 'src/modules/image/dto/updateImage.dto';
 
-export class UpdateProductDto extends PartialType(CreateProductDto) {}
+export class UpdateProductDto {
+  name: string;
+  price: number;
+  isActive: boolean;
+  images: UpdateImages[];
+}

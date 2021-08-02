@@ -1,6 +1,7 @@
+import { Image } from 'src/modules/image/entity/image.entity';
 import { User } from 'src/modules/user/user.entity';
 import { BaseEntity } from 'src/utility/entity/base.entity';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 
 @Entity()
 export class Product extends BaseEntity {
@@ -9,6 +10,9 @@ export class Product extends BaseEntity {
 
   @Column()
   price: number;
+
+  @OneToMany(() => Image, (image) => image.product)
+  images: Image[];
 
   @ManyToOne((type) => User, (user) => user.products_created, { lazy: true })
   @JoinColumn()

@@ -46,7 +46,16 @@ export class EnvironmentVariables {
   URL: string;
 
   @IsString()
-  POSTGRES_URL: string;
+  IMAGEKIT_URL: string;
+
+  @IsString()
+  IMAGEKIT_ID: string;
+
+  @IsString()
+  IMAGEKIT_PUBLIC_KEY: string;
+
+  @IsString()
+  IMAGEKIT_PRIVATE_KEY: string;
 }
 
 export function validate(config: Record<string, unknown>) {

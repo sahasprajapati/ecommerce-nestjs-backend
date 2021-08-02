@@ -22,15 +22,17 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) {}
 
   @Get()
-  findAll(
+  async findAll(
     @Query() paginationDto: PaginationDto,
   ): Promise<PaginatedResultDto<Product[]>> {
     paginationDto.page = Number(paginationDto.page);
     paginationDto.limit = Number(paginationDto.limit);
-    return this.productsService.findAll({
+    const data = this.productsService.findAll({
       ...paginationDto,
       limit: paginationDto.limit > 10 ? 10 : paginationDto.limit,
     });
+    console.log(await data);
+    return data;
   }
 
   @Get(':id')

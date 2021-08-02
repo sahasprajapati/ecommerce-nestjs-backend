@@ -6,6 +6,7 @@ import {
   EnvironmentVariables,
   validate,
 } from 'src/modules/config/env.validation';
+import { ImageModule } from 'src/modules/image/image.module';
 import { AuthModule } from './../modules/auth/auth.module';
 import { CategoryModule } from './../modules/category/category.module';
 import { ProductsModule } from './../modules/products/products.module';
@@ -24,7 +25,6 @@ import { AppService } from './app.service';
       imports: [ConfigModule],
       useFactory: (configService: ConfigService<EnvironmentVariables>) => ({
         type: 'postgres',
-        // url: configService.get('POSTGRES_URL'),
 
         host: configService.get('POSTGRES_HOST'),
         port: configService.get('POSTGRES_PORT'),
@@ -41,6 +41,7 @@ import { AppService } from './app.service';
     AuthModule,
     UserModule,
     ProductsModule,
+    ImageModule,
   ],
   controllers: [AppController],
   providers: [AppService],
