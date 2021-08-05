@@ -11,6 +11,9 @@ export class Product extends BaseEntity {
   @Column()
   price: number;
 
+  @Column({ type: 'varchar', length: 300 })
+  description: string;
+
   @OneToMany(() => Image, (image) => image.product)
   images: Image[];
 

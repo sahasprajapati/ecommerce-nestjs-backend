@@ -4,5 +4,6 @@ export class CreateProductDto {
   name: string;
   price: number;
   isActive: boolean;
+  description: string;
   images: CreateImages[];
 }

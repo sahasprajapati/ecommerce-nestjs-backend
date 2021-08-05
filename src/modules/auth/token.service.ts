@@ -1,7 +1,13 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import {
+  Injectable,
+  Logger,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { SignOptions, TokenExpiredError } from 'jsonwebtoken';
+import { LessThan } from 'typeorm';
 import { EnvironmentVariables } from '../config/env.validation';
 import { User } from '../user/user.entity';
 import { UserService } from '../user/user.service';
@@ -14,6 +20,8 @@ export interface RefreshTokenPayload {
 }
 @Injectable()
 export class TokensService {
+  private readonly logger = new Logger('TokensService');
+
   public BASE_OPTIONS: SignOptions;
   public constructor(
     private readonly tokens: RefreshTokensRepository,
@@ -52,6 +60,7 @@ export class TokensService {
 
   public async resolveRefreshToken(
     encoded: string,
+    expiresIn: number = 60 * 60 * 24 * 30,
   ): Promise<{ user: User; refreshToken: string }> {
     const payload = await this.decodeRefreshToken(encoded);
     const token = await this.getStoredTokenFromRefreshPayload(payload);
@@ -79,18 +88,19 @@ export class TokensService {
     // Revoke the current Refresh Token
     this.tokens.revokeRefreshToken(token.id);
     // Send a new refresh Token with Each refresh (For security)
-    const refreshToken = await this.generateRefreshToken(
-      user,
-      60 * 60 * 24 * 30,
-    );
+    const refreshToken = await this.generateRefreshToken(user, expiresIn);
 
     return { user, refreshToken };
   }
 
   public async createAcessTokenFromRefreshToken(
     refresh: string,
+    expiresIn: number = 60 * 60 * 24 * 30,
   ): Promise<{ token: string; user: User; refreshToken: string }> {
-    const { user, refreshToken } = await this.resolveRefreshToken(refresh);
+    const { user, refreshToken } = await this.resolveRefreshToken(
+      refresh,
+      expiresIn,
+    );
 
     const token = await this.generateAccessToken(user);
 
@@ -129,9 +139,43 @@ export class TokensService {
     const tokenId = payload.jti;
 
     if (!tokenId) {
-      throw new UnprocessableEntityException('Refresh oken malformed');
+      throw new UnprocessableEntityException('Refresh token malformed');
     }
 
     return this.tokens.findTokenById(tokenId);
+  }
+
+  public async deleteRefreshToken(encoded: string) {
+    const payload = await this.decodeRefreshToken(encoded);
+    const token = await this.getStoredTokenFromRefreshPayload(payload);
+
+    if (!token) {
+      throw new UnprocessableEntityException('Refresh token not found');
+    }
+    this.tokens.delete({
+      id: token.id,
+    });
+  }
+
+  @Cron(CronExpression.EVERY_DAY_AT_1AM)
+  async handleCron() {
+    const tokens = await this.tokens.find({
+      where: [
+        {
+          expires: LessThan(new Date(Date.now())),
+        },
+        { is_revoked: true },
+      ],
+    });
+
+    tokens.forEach((token) => {
+      this.tokens.delete({
+        id: token.id,
+      });
+    });
+
+    this.logger.debug(
+      'Running CRON JOB to remove expired/revoked Refresh Token',
+    );
   }
 }

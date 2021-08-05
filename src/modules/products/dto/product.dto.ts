@@ -5,5 +5,7 @@ export class UserDTO extends BaseDto {
   id: string;
   name: string;
   price: string;
+  description: string;
+
   images: ImageDto[];
 }

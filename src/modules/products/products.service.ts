@@ -20,22 +20,26 @@ export class ProductsService {
   ) {}
 
   async create(createdBy: string, productDto: CreateProductDto) {
+    const { name, price, isActive, description, images } = productDto;
+
     const product = new Product();
-    product.name = productDto.name;
-    product.price = productDto.price;
-    product.isActive = !!productDto.isActive;
+
+    product.name = name;
+    product.price = price;
+    product.isActive = !!isActive;
 
     const creator = await this.usersService.findForId(createdBy);
     product.createdBy = creator;
     product.updatedBy = creator;
+    product.description = description;
 
-    product.images = await this.imageService.upload(productDto.images);
+    product.images = await this.imageService.upload(images);
 
-    console.log(product);
-
-    return this.productsRepository.save(product);
+    return await this.productsRepository.save(product).catch((err) => {
+      console.error(err);
+      console.log(product);
+    });
   }
-
   async findAll(
     paginationDto: PaginationDto,
   ): Promise<PaginatedResultDto<Product[]>> {
@@ -74,12 +78,13 @@ export class ProductsService {
     updateProductDto: UpdateProductDto,
   ) {
     const product = await this.productsRepository.findOne({ id: id });
-    const { images, ...data } = updateProductDto;
+    const { name, price, isActive, description, images } = updateProductDto;
 
-    product.name = data.name;
-    product.price = data.price;
+    product.name = name;
+    product.price = price;
     product.updatedBy = await this.usersService.findForId(updatedBy);
-    product.isActive = !!data.isActive;
+    product.isActive = !!isActive;
+    product.description = description;
 
     const resultProduct = await this.productsRepository.findOne({
       where: {
