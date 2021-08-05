@@ -140,7 +140,7 @@ export class AuthenticationController {
         data: payload,
       });
     }
-    return res.status(401).send({
+    return res.status(403).send({
       status: 'failure',
     });
   }
