@@ -50,7 +50,7 @@
     "rimraf": "^3.0.2",
     "rxjs": "^7.2.0",
     "typeorm": "^0.2.34",
-    "ts-node": "^9.1.1"
+    "ts-node": "^10.3.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.6.0",
