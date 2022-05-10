@@ -11,6 +11,7 @@ services:
   # but you can use the name of your choice.
   # Note: This may change the commands you are going to use a little bit.
   database:
+    container_name: nestjs-backend-postgres
     # Official Postgres image from DockerHub (we use the last version)
     image: 'postgres:latest'
 
