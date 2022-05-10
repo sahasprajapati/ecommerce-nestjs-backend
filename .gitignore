@@ -37,5 +37,5 @@ lerna-debug.log*
 /db-data
 
 #Environment files
-.env.production
-.env
+# .env.production
+# .env
