@@ -1,4 +1,7 @@
 <p>
+  <b>Yarn to install node_modules</b>
+  
+  <br/>
 Inorder to start docker:
   sudo systemctl start docker
 
