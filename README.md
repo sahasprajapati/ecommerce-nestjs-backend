@@ -3,8 +3,12 @@ Inorder to start docker:
   sudo systemctl start docker
 
 Docker-compose and docker needs to be installed
-run npm run start:dev:db OR docker-compose up -d
-
+  <ul>
+    <li>npm run start:dev:db OR docker-compose up -d</li>
+    <li>npm run typeorm:run</li>
+    <li>npm run start</li>
+    </ul>
+  
 </p>
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
