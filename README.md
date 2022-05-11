@@ -1,18 +1,28 @@
 <p>
-  <b>Yarn to install node_modules</b>
+  <b>Yarn to install node_modules, npm might cause dependency problems</b>
   
   <br/>
-Inorder to start docker:
-  sudo systemctl start docker
+
 
 Docker-compose and docker needs to be installed
-  <ul>
-    <li>npm run start:dev:db OR docker-compose up -d</li>
-    <li>npm run typeorm:run</li>
-    <li>npm run start</li>
-    </ul>
-  
-</p>
+
+
+```bash
+# install node_modules
+$ yarn
+
+# setup databse-docker#windows
+$ yarn start:dev:db
+
+# setup databse-docker#linux
+$ yarn start:dev:db:linux
+
+# run migration
+$ yarn typeorm:run
+
+# run project
+$ yarn start:dev
+```
 <p align="center">
   <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo_text.svg" width="320" alt="Nest Logo" /></a>
 </p>
